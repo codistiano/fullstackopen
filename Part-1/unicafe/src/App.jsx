@@ -15,8 +15,20 @@ const FeedbackBtns = ({goodBtn, neutralBtn, badBtn}) => {
 
 // Output part of the app
 const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad;
   const average = (good + neutral + bad) / 3;
   const positive = (good - bad) / (good + neutral + bad);
+
+  const feedbackAvailable = good + neutral + bad == 0;
+
+  if (feedbackAvailable) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No Feedback given</p>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -24,6 +36,7 @@ const Statistics = ({ good, neutral, bad }) => {
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+      <p>All: {total}</p>
       <p>Average: {average}</p>
       <p>Positive Feedback: {positive}%</p>
     </div>
