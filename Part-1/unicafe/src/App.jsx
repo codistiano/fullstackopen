@@ -15,12 +15,17 @@ const FeedbackBtns = ({goodBtn, neutralBtn, badBtn}) => {
 
 // Output part of the app
 const Statistics = ({ good, neutral, bad }) => {
+  const average = (good + neutral + bad) / 3;
+  const positive = (good - bad) / (good + neutral + bad);
+
   return (
     <div>
       <h1>Statistics</h1>
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+      <p>Average: {average}</p>
+      <p>Positive Feedback: {positive}%</p>
     </div>
   );
 };
