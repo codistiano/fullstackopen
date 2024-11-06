@@ -8,28 +8,36 @@ const Course = ({ course }) => {
 };
 
 const Header = ({ name }) => {
-  return (
-    <h1>{name}</h1>
-  )
-}
+  return <h1>{name}</h1>;
+};
 
 const Content = ({ parts }) => {
+  const total = parts.reduce((sum, part) => {
+    return sum + part.exercises
+  }, 0);
+  
+
   return (
     <div>
       <Parts part={parts[0]} />
       <Parts part={parts[1]} />
       <Parts part={parts[2]} />
+      <p>
+        <strong>Total of {total} exercises</strong>
+      </p>
     </div>
-  )
-}
+  );
+};
 
-const Parts = ({part}) => {
+const Parts = ({ part }) => {
   return (
     <>
-      <p>{part.name} {part.exercises}</p>
+      <p>
+        {part.name} {part.exercises}
+      </p>
     </>
-  )
-}
+  );
+};
 
 const App = () => {
   const course = {
