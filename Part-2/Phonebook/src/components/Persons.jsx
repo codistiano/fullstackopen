@@ -1,11 +1,13 @@
-const Persons = (props) => {
+const Persons = ({ result }) => {
   return (
     <>
-      {props.results.map((person) => (
-        <p key={person.name}>
-          {person.name} {person.number}
-        </p>
-      ))}
+      {result.map((person) => {
+        return (
+          <p key={person.name}>
+            {person.name} {person.number}
+          </p>
+        );
+      })}
     </>
   );
 };
