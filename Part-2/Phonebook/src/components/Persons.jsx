@@ -1,10 +1,11 @@
-const Persons = ({ result }) => {
+const Persons = ({ result, deleteFunc }) => {
   return (
     <>
       {result.map((person) => {
         return (
           <p key={person.name}>
-            {person.name} {person.number}
+            {person.name} {person.number}{" "}
+            <button onClick={() => deleteFunc(person.id)}>Delete</button>
           </p>
         );
       })}
@@ -13,3 +14,4 @@ const Persons = ({ result }) => {
 };
 
 export default Persons;
+ 

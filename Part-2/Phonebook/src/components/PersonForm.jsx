@@ -8,8 +8,8 @@ const PersonForm = ({handleSubmit, newName, newNum, setNewName, setNewNum }) => 
           onChange={(e) => setNewName(e.target.value)}
           value={newName}
         />
-        <div>debug: {newName}</div>
       </div>
+      <br />
       <div>
         number:{" "}
         <input
