@@ -3,6 +3,30 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personServices from "./services/persons";
+import "./index.css"
+
+const Notification = ({message, errorMessage}) => {
+  if (message === null && errorMessage === null) {
+    return null
+  } 
+
+  if (message) {
+    return (
+      <div className="message">
+        {message}
+      </div>
+    )
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="error">
+        {errorMessage}
+      </div>
+    )
+  }
+  
+}
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,6 +34,8 @@ const App = () => {
   const [newNum, setNewNum] = useState("");
   const [search, setSearch] = useState("");
   const [result, setResult] = useState(persons);
+  const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,8 +61,14 @@ const App = () => {
       .then((data) => {
         setPersons(persons.concat(data));
         setResult(persons.concat(data));
+        setMessage(
+          `Added '${data.name}' ` 
+        )
         setNewName("");
         setNewNum("");
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
     })
       .catch((err) => {
         console.log("AN ERROR OCCURRED!")
@@ -57,6 +89,17 @@ const App = () => {
           setResult(persons.map(person => (person.id === id ? data : person)))
           setNewName("")
           setNewNum("")
+        })
+        .catch(error => {
+          setErrorMessage(`Information of ${updatedPerson.name} has been removed from the server`)
+          
+          setPersons(persons.filter(person => person.id !== id)); 
+          setResult(result.filter(person => person.id !== id));
+          setNewName("")
+          setNewNum("")
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
     }
   }
@@ -99,10 +142,10 @@ const App = () => {
     }
   }
 
-
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} errorMessage={errorMessage} />
       <Filter filtering={filtering} search={search} />
       <h3>Add a new</h3>
       <PersonForm
