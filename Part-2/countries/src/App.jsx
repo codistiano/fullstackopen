@@ -34,6 +34,10 @@ const App = () => {
     }
   };
 
+  const displayDetail = (countryName) => {
+    setValue(countryName);
+  };
+
   return (
     <div>
       <h1>Countries</h1>
@@ -47,23 +51,33 @@ const App = () => {
         ) : (countries.length >= 2 && countries?.length <= 10) ||
           countries.length === 0 ? (
           countries?.map((country) => {
-            return <p key={country.name.common}>{country.name.common}</p>;
+            return (
+              <>
+                <p key={country.name.common}>
+                  {country.name.common}{" "}
+                  <button onClick={() => displayDetail(country.name.common)}>
+                    Show
+                  </button>
+                </p>
+              </>
+            );
           })
         ) : (
           <>
-          <div>
-          <h1>{countries[0].name.common}</h1>
-          <p>Capital City: {countries[0].capital}</p> 
-          <p>Area: {countries[0].area}</p> 
-          <p><strong>Languages: </strong></p>
-          <ul>
-            {Object.values(countries[0].languages).map((language) => {
-              return <li>{language}</li>
-            })}
-          </ul>
-          <img src={countries[0].flags.png} alt={countries[0].flags.png} />
-
-          </div>
+            <div>
+              <h1>{countries[0].name.common}</h1>
+              <p>Capital City: {countries[0].capital}</p>
+              <p>Area: {countries[0].area}</p>
+              <p>
+                <strong>Languages: </strong>
+              </p>
+              <ul>
+                {Object.values(countries[0].languages).map((language) => {
+                  return <li>{language}</li>;
+                })}
+              </ul>
+              <img src={countries[0].flags.png} alt={countries[0].flags.png} />
+            </div>
           </>
         )}
       </div>
