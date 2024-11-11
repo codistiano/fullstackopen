@@ -1,7 +1,13 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
 app.use(express.json());
+app.use(morgan(":method :url :status - :response-time ms :body"))
+
+morgan.token("body", (req, res) => {
+    return JSON.stringify(req.body);
+})
 
 const persons = [
   {
@@ -78,8 +84,6 @@ app.post("/api/persons", (req, res) => {
   persons.push(newContact);
   res.send(newContact);
 });
-
-
 
 const PORT = process.env.PORT || 3001;
 
