@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 require('dotenv').config()
 const Blog = require('./models/blog')
+const logger = require('./utils/logger')
 
 mongoose.set('strictQuery', false)
 
@@ -11,10 +12,10 @@ const mongoUrl = process.env.LOCAL_MONGODB_URI
 
 mongoose.connect(mongoUrl)
 .then(() => {
-  console.log('Connected to MongoDB')
+  logger.info('Connected to MongoDB')
 })
 .catch(error => {
-  console.log('Error connecting to MongoDB:', error.message)
+  logger.error('Error connecting to MongoDB:', error.message)
 })
 
 app.use(cors())
@@ -40,5 +41,5 @@ app.post('/api/blogs', (request, response) => {
 
 const PORT = 3003
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  logger.info(`Server running on port ${PORT}`)
 })
