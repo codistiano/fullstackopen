@@ -2,13 +2,13 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
-require('dotenv').config()
+const config = require('./utils/config')
 const Blog = require('./models/blog')
 const logger = require('./utils/logger')
 
 mongoose.set('strictQuery', false)
 
-const mongoUrl = process.env.LOCAL_MONGODB_URI
+const mongoUrl = config.LOCAL_MONGODB_URI
 
 mongoose.connect(mongoUrl)
 .then(() => {
@@ -39,7 +39,6 @@ app.post('/api/blogs', (request, response) => {
     })
 })
 
-const PORT = 3003
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
 })
