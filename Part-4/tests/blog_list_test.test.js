@@ -67,7 +67,7 @@ test('setting like to 0 if not set in the request', async() => {
     assert.strictEqual(blogsAtEnd[helper.newBlogs.length].likes, "0")
 })
 
-test.only('Not allowing missing content when requesting', async() => {
+test('Not allowing missing content when requesting', async() => {
     const newBlog = {
         url: 'http://example.com/blog/11',
         likes: 1
@@ -80,6 +80,23 @@ test.only('Not allowing missing content when requesting', async() => {
 
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length)
+})
+
+test.only('delete a valid blog', async() => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const blogToBeDeleted = blogsAtStart[blogsAtStart.length - 1]
+
+    await api
+    .delete(`/api/blogs/${blogToBeDeleted.id}`)
+    .expect(204)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length - 1)
+
+    const title = blogsAtEnd.map(blog => blog.title)
+    assert(!title.includes(blogToBeDeleted.title))
 })
 
 after(async() => {
