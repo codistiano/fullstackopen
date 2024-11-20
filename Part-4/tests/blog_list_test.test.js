@@ -50,7 +50,7 @@ test('Create a new blog post', async() => {
     assert(blogsAtEnd[helper.newBlogs.length])
 })
 
-test.only('setting like to 0 if not set in the request', async() => {
+test('setting like to 0 if not set in the request', async() => {
     const newBlog = {
         title: 'a blog without a like',
         author: 'me, myself and I',
@@ -65,6 +65,21 @@ test.only('setting like to 0 if not set in the request', async() => {
 
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd[helper.newBlogs.length].likes, "0")
+})
+
+test.only('Not allowing missing content when requesting', async() => {
+    const newBlog = {
+        url: 'http://example.com/blog/11',
+        likes: 1
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length)
 })
 
 after(async() => {
