@@ -11,7 +11,7 @@ const api = supertest(app)
 beforeEach(async() => {
     await Blog.deleteMany({})
 
-    const blogObjects = helper.blogs.map(blog => new Blog(blog))
+    const blogObjects = helper.newBlogs.map(blog => new Blog(blog))
     await Promise.all(blogObjects.map(blog => blog.save()))
 
     console.log('saved')
@@ -23,12 +23,31 @@ test('All blog list are returned in JSON format', async() => {
     assert.strictEqual(returnedBlogs.body.length, helper.blogs.length)
 })
 
-test.only('id property is available in the document', async() => {
+test('id property is available in the document', async() => {
     const response = await api.get('/api/blogs')
 
     const hasAnIdProperty = response.body.some(blog => blog.id)
 
     assert(hasAnIdProperty)
+})
+
+test.only('Create a new blog post', async() => {
+    const newBlog = {
+        title: 'A pretty new blog',
+        author: "Jess Doe",
+        url: "http://www.example.com/blog/23",
+        likes: 23
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length + 1)
+    assert(blogsAtEnd[helper.newBlogs.length])
 })
 
 after(async() => {
