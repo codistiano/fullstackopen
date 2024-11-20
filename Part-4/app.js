@@ -8,7 +8,7 @@ const config = require('./utils/config')
 
 mongoose.set('strictQuery', false)
 
-mongoose.connect(config.LOCAL_MONGODB_URI)
+mongoose.connect(config.MONGODB_URI)
 .then(() => {
     logger.info("Connected to the Database")
 })
