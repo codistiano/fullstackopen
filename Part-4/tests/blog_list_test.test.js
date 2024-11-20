@@ -82,7 +82,7 @@ test('Not allowing missing content when requesting', async() => {
     assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length)
 })
 
-test.only('delete a valid blog', async() => {
+test('delete a valid blog', async() => {
     const blogsAtStart = await helper.blogsInDb()
 
     const blogToBeDeleted = blogsAtStart[blogsAtStart.length - 1]
@@ -98,6 +98,25 @@ test.only('delete a valid blog', async() => {
     const title = blogsAtEnd.map(blog => blog.title)
     assert(!title.includes(blogToBeDeleted.title))
 })
+
+test.only('update a valid blog', async() => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const blogToBeUpdated = blogsAtStart[0]
+
+    const updatedProperty = {
+        likes: 111
+    }
+
+    await api
+    .put(`/api/blogs/${blogToBeUpdated.id}`)
+    .send(updatedProperty)
+    .expect(200)
+
+    const updatedBlog = await helper.blogsInDb()
+    assert.strictEqual(updatedBlog[0].likes, updatedProperty.likes.toString())
+})
+
 
 after(async() => {
     await mongoose.connection.close()
