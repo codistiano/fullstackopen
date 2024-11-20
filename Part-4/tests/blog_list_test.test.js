@@ -31,7 +31,7 @@ test('id property is available in the document', async() => {
     assert(hasAnIdProperty)
 })
 
-test.only('Create a new blog post', async() => {
+test('Create a new blog post', async() => {
     const newBlog = {
         title: 'A pretty new blog',
         author: "Jess Doe",
@@ -48,6 +48,23 @@ test.only('Create a new blog post', async() => {
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length + 1)
     assert(blogsAtEnd[helper.newBlogs.length])
+})
+
+test.only('setting like to 0 if not set in the request', async() => {
+    const newBlog = {
+        title: 'a blog without a like',
+        author: 'me, myself and I',
+        url: "http://www.example.com/blog/43"
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd[helper.newBlogs.length].likes, "0")
 })
 
 after(async() => {
