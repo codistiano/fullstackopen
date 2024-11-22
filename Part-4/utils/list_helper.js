@@ -19,7 +19,7 @@ const favoriteBlog = (blogs) => {
     blogs.map((blog) => maxLikes = Math.max(maxLikes, blog.likes))
     const maxLikedObj = blogs.filter((blog) => blog.likes === maxLikes)
     
-    console.log(maxLikedObj[0])
+    // console.log(maxLikedObj[0])
     return blogs.length === 0 
     ? null
     : blogs.length === 1

@@ -77,12 +77,12 @@ describe('total likes', () => {
     })
 
     test('when list has only one blog, equals the likes of that', () => {
-        console.log(listHelper.totalLikes(listWithOneBlog))
+        // console.log(listHelper.totalLikes(listWithOneBlog))
         assert.strictEqual(listHelper.totalLikes(listWithOneBlog), 5)
     })
 
     test('of a bigger list is calculated right', () => {
-        console.log(listHelper.totalLikes(blogs))
+        // console.log(listHelper.totalLikes(blogs))
        assert.strictEqual(listHelper.totalLikes(blogs), 36) 
     })
 })

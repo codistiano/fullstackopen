@@ -1,7 +1,8 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('assert')
 const mongoose = require('mongoose')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./blog_testing_helper')
 const supertest = require('supertest')
 const app = require('../app')
@@ -20,7 +21,7 @@ beforeEach(async() => {
 test('All blog list are returned in JSON format', async() => {
     const returnedBlogs = await api.get('/api/blogs').expect('content-type', /application\/json/)
 
-    assert.strictEqual(returnedBlogs.body.length, helper.blogs.length)
+    assert.strictEqual(returnedBlogs.body.length, helper.newBlogs.length)
 })
 
 test('id property is available in the document', async() => {
@@ -115,6 +116,45 @@ test.only('update a valid blog', async() => {
 
     const updatedBlog = await helper.blogsInDb()
     assert.strictEqual(updatedBlog[0].likes, updatedProperty.likes.toString())
+})
+
+describe('Users related tests', () => {
+    test('Users are created when the input is valid', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const user = {
+            username: "someone",
+            name: "some",
+            password: "someone"
+        }
+
+        await api
+        .post('/api/users')
+        .send(user)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+    })
+
+    test('Data is not created when the input is invalid', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const user = {
+            username: "ab",
+            name: "abdu",
+            password: "ba"
+        }
+
+        await api
+        .post('/api/users')
+        .send(user)
+        .expect(400)
+        
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtStart.length, usersAtEnd.length)
+    })
 })
 
 
