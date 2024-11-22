@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === 'CastError') {
         return res.status(400).json({'error': err.message})
     }
-    next(error)
+    next(err)
 }
 
 module.exports = {
