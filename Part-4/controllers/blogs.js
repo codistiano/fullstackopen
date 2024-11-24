@@ -56,17 +56,12 @@ blogsRouter.delete('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id)
 
   if (blog.user.toString() === user.id.toString()) {
-    delete blog
+    await Blog.findByIdAndDelete(req.params.id)
+    return res.status(204).end()
   } else {
     return res.status(404).json({ error: "An Error Occurred while try to delete a blog" })
   }
-  
 
-  console.log(user)
-  console.log(blog)
-
-  // const blogToBeDeleted = await Blog.findByIdAndDelete(req.params.id)
-  // return res.status(204).end()
 })
 
 module.exports = blogsRouter;
