@@ -1,4 +1,3 @@
-const app = require('../app')
 const logger = require('./logger')
 
 const tokenExtractor  = (req, res, next) => {
@@ -10,6 +9,19 @@ const tokenExtractor  = (req, res, next) => {
     }
     next();
 };
+
+const userExtractor = async (req, res, next) => {
+    const token = req.token
+    if (!token) {
+        return res.status(401).json({ error: 'Token Unavailable' })
+    }
+
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'Token Invalid' })
+    }
+    next()
+}
 
 const errorHandler = (err, req, res, next) => {
     logger.error(err.message)
@@ -24,5 +36,6 @@ const errorHandler = (err, req, res, next) => {
 
 module.exports = {
     errorHandler,
-    tokenExtractor
+    tokenExtractor,
+    userExtractor
 }
