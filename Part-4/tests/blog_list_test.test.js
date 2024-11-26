@@ -5,14 +5,33 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./blog_testing_helper')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const app = require('../app')
 
 const api = supertest(app)
 
+let token;
+
 beforeEach(async() => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
 
-    const blogObjects = helper.newBlogs.map(blog => new Blog(blog))
+    const user = new User({
+        username: "testuser",
+        name: "Test User",
+        passwordHash: await bcrypt.hash("password", 10),
+    });
+
+    const savedUser = await user.save()
+
+    token = jwt.sign(
+        { username: savedUser.username, id: savedUser._id }, 
+        process.env.SECRET, 
+        { expiresIn: '1h' }
+    )
+
+    const blogObjects = helper.newBlogs.map(blog => new Blog({...blog, user: savedUser.id}))
     await Promise.all(blogObjects.map(blog => blog.save()))
 
     console.log('saved')
@@ -33,16 +52,20 @@ test('id property is available in the document', async() => {
 })
 
 test('Create a new blog post', async() => {
+    // a token brought from the beforeach function above
+
     const newBlog = {
         title: 'A pretty new blog',
         author: "Jess Doe",
         url: "http://www.example.com/blog/23",
-        likes: 23
+        likes: 23,
     }
+
 
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-type', /application\/json/)
 
@@ -61,6 +84,7 @@ test('setting like to 0 if not set in the request', async() => {
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -74,9 +98,11 @@ test('Not allowing missing content when requesting', async() => {
         likes: 1
     }
 
+
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(400)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -90,17 +116,17 @@ test('delete a valid blog', async() => {
 
     await api
     .delete(`/api/blogs/${blogToBeDeleted.id}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(204)
     
     const blogsAtEnd = await helper.blogsInDb()
 
     assert.strictEqual(blogsAtEnd.length, helper.newBlogs.length - 1)
-
     const title = blogsAtEnd.map(blog => blog.title)
     assert(!title.includes(blogToBeDeleted.title))
 })
 
-test.only('update a valid blog', async() => {
+test('update a valid blog', async() => {
     const blogsAtStart = await helper.blogsInDb()
 
     const blogToBeUpdated = blogsAtStart[0]
@@ -123,9 +149,9 @@ describe('Users related tests', () => {
         const usersAtStart = await helper.usersInDb()
 
         const user = {
-            username: "someone",
+            username: "someoneisomeone",
             name: "some",
-            password: "someone"
+            password: "someoneyouknow"
         }
 
         await api

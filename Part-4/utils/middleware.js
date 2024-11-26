@@ -1,11 +1,12 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
 
 const tokenExtractor  = (req, res, next) => {
     const authorization = req.get('authorization');
     if (authorization && authorization.startsWith('Bearer ')) {
         req.token = authorization.replace('Bearer ', ''); 
     } else {
-        req.token = null; 
+        req.token = null;
     }
     next();
 };
@@ -20,6 +21,8 @@ const userExtractor = async (req, res, next) => {
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'Token Invalid' })
     }
+    
+    req.user = decodedToken.id;
     next()
 }
 
