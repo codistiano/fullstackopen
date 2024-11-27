@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './style.css';
+
+const Notification = ({ message, type })  => {
+  if (message === '') {
+    return null
+  }
+  return (
+    <div className="notification" style={{ backgroundColor: type === 'error'? 'red' : 'green' }}>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +23,7 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
+  const [notification, setNotification] = useState({ message: '', type: '' })
   
   useEffect(() => {
     const blogs = blogService.getAll()
@@ -39,8 +52,16 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setNotification({message: "Logged In Successfully", type: "success"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
     } catch (error) {
       console.log(error)
+      setNotification({message: "Wrong Username and Period", type: "error"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 5000)
     }
   }
 
@@ -51,21 +72,39 @@ const App = () => {
       author: newAuthor,
       url: newUrl
     }
-    const newBlog = await blogService.create(newBlogObject)
-    setBlogs(blogs.concat(newBlog))
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
+    try {
+      const newBlog = await blogService.create(newBlogObject)
+      setBlogs(blogs.concat(newBlog))
+      setNewTitle('')
+      setNewAuthor('')
+      setNewUrl('')
+      setNotification({message: "Created a blog successfully", type: "success"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 5000)
+    } catch (error) {
+      console.log(error)
+      setNotification({message: "Error Creating Blog", type: "error"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
+    }
   }
   
   const handleLogout = async (e) => {
     e.preventDefault()
     window.localStorage.removeItem('loggedInAppUser')
+    setUser(null)
+    setNotification({message: "Logged Out Successfully", type: "success"})
+    setTimeout(() => {
+      setNotification({ message: '', type: '' })
+    }, 3000)
   }
 
   if (user === null) {
     return (
       <div>
+        <Notification message={notification.message} type={notification.type} />
         <h2>Log in to application</h2>
         <form>
           <label>Username:</label>
@@ -83,6 +122,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notification.message} type={notification.type} />
       <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
       <br />
       <h2>Create New</h2>
