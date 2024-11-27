@@ -8,7 +8,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+  
   useEffect(() => {
     const blogs = blogService.getAll()
     .then((blogs) => {
@@ -21,9 +24,10 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
-
+  
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
@@ -40,6 +44,20 @@ const App = () => {
     }
   }
 
+  const createBlog = async (e) => {
+    e.preventDefault()
+    const newBlogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+    const newBlog = await blogService.create(newBlogObject)
+    setBlogs(blogs.concat(newBlog))
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+  }
+  
   const handleLogout = async (e) => {
     e.preventDefault()
     window.localStorage.removeItem('loggedInAppUser')
@@ -66,6 +84,20 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
+      <br />
+      <h2>Create New</h2>
+      <form>
+        <label>Title: </label>
+        <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+        <br />
+        <label>Author: </label>
+        <input type="text" value={newAuthor} onChange={e => setNewAuthor(e.target.value)} />
+        <br />
+        <label>Url: </label>
+        <input type="text" value={newUrl} onChange={e => setNewUrl(e.target.value)} />
+        <br />
+        <button onClick={createBlog}>Create</button>
+      </form>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
