@@ -80,6 +80,23 @@ const App = () => {
       }, 3000)
     }
   }
+
+  const addLike = async (blogObject) => {
+
+    try {
+      const updatedBlog = await blogService.addLike(blogObject)
+      setNotification({message: "Blog Liked", type: "success"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
+    } catch (error) {
+      console.log(error)
+      setNotification({ message: "Error while liking the blog", type: "error"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
+    }
+  }
   
   const handleLogout = async (e) => {
     e.preventDefault()
@@ -120,7 +137,7 @@ const App = () => {
       
       <br />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} />
       )}
     </div>
   )
