@@ -97,6 +97,32 @@ const App = () => {
       }, 3000)
     }
   }
+
+  const deleteBlog = async (blogObject) => {
+
+    const confirm = window.confirm(`Remove Blog, "${blogObject.title} by ${blogObject.author}"`)
+
+    if (!confirm) {
+      return
+    }
+
+    const blogId = blogObject.id
+
+    try {
+      await blogService.deleteBlog(blogId)
+      setBlogs(blogs.filter(blog => blog.id !== blogId))
+      setNotification({message: "Blog Deleted", type: "success"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
+    } catch (error) {
+      console.log(error)
+      setNotification({ message: "Error while deleting the blog", type: "error"})
+      setTimeout(() => {
+        setNotification({ message: '', type: '' })
+      }, 3000)
+    }
+  }
   
   const handleLogout = async (e) => {
     e.preventDefault()
@@ -137,7 +163,7 @@ const App = () => {
       
       <br />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={addLike} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} user={user} deleteBlog={deleteBlog} />
       )}
     </div>
   )
