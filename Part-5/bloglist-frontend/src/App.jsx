@@ -24,7 +24,7 @@ const App = () => {
   const [notification, setNotification] = useState({ message: '', type: '' })
   
   useEffect(() => {
-    const blogs = blogService.getAll()
+    blogService.getAll()
     .then((blogs) => {
       setBlogs( blogs.sort((a, b) => b.likes - a.likes))
     })
@@ -66,7 +66,7 @@ const App = () => {
   const createBlog = async (blogObject) => {
     
     try {
-      const newBlog = await blogService.create(blogObject)
+      await blogService.create(blogObject)
       setBlogs(blogs.concat(blogObject))
       setNotification({message: "Created a blog successfully", type: "success"})
       setTimeout(() => {
@@ -84,7 +84,7 @@ const App = () => {
   const addLike = async (blogObject) => {
 
     try {
-      const updatedBlog = await blogService.addLike(blogObject)
+      await blogService.addLike(blogObject)
       setNotification({message: "Blog Liked", type: "success"})
       setTimeout(() => {
         setNotification({ message: '', type: '' })
