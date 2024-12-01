@@ -31,14 +31,14 @@ const BlogForm = ({ createBlog }) => {
       </div>
       <div style={showWhenVisible}>
         <form>
-          <label>Title: </label>
-          <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+          <label htmlFor='title'>Title: </label>
+          <input id='title' type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
           <br />
-          <label>Author: </label>
-          <input type="text" value={newAuthor} onChange={e => setNewAuthor(e.target.value)} />
+          <label htmlFor='author'>Author: </label>
+          <input id='author' type="text" value={newAuthor} onChange={e => setNewAuthor(e.target.value)} />
           <br />
-          <label>Url: </label>
-          <input type="text" value={newUrl} onChange={e => setNewUrl(e.target.value)} />
+          <label htmlFor='url'>Url: </label>
+          <input id='url' type="text" value={newUrl} onChange={e => setNewUrl(e.target.value)} />
           <br />
           <button onClick={addBlog}>Create</button> <br />
           <button onClick={() => setFormVisible(false)}>Cancel</button>

@@ -3,7 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './style.css';
-import BlogForm from './components/BlogForm.';
+import BlogForm from './components/BlogForm';
 
 const Notification = ({ message, type })  => {
   if (message === '') {
