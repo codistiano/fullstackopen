@@ -29,9 +29,9 @@ const blogStyle = {
 
   return (
     <div style={blogStyle}>
-      {blog.title} - {blog.author} <button onClick={() => setVisible((prev) => !prev)}>{ visible ? 'hide' : 'view'}</button>
+      {blog.title} - <span data-testid='blog-author'>{blog.author}</span> <button onClick={() => setVisible((prev) => !prev)}>{ visible ? 'hide' : 'view'}</button>
       <div>
-        <div style={{ display: visible ? '' : 'none'}}>
+        <div style={{ display: visible ? '' : 'none'}} data-testid='hidden-details'>
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button onClick={likePlus}>Like</button></p>
           <p>{blog.user.name}</p>
