@@ -33,7 +33,7 @@ const blogStyle = {
       <div>
         <div style={{ display: visible ? '' : 'none'}} data-testid='hidden-details'>
           <p>{blog.url}</p>
-          <p>likes {blog.likes} <button onClick={likePlus}>Like</button></p>
+          <p>likes {blog.likes} <button data-testid='like-button' onClick={likePlus}>Like</button></p>
           <p>{blog.user.name}</p>
           {blog.user.username === user.username && <button onClick={blogToBeDeleted}>Delete</button>}
         </div>
