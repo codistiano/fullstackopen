@@ -56,7 +56,7 @@ const App = () => {
       }, 3000)
     } catch (error) {
       console.log(error)
-      setNotification({message: "Wrong Username and Period", type: "error"})
+      setNotification({message: "Wrong credentials", type: "error"})
       setTimeout(() => {
         setNotification({ message: '', type: '' })
       }, 5000)

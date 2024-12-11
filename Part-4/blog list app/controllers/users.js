@@ -27,4 +27,8 @@ usersRouter.post('/', async (req, res) => {
     return res.status(201).json(savedUser)
 })
 
+usersRouter.post('/reset', (req, res) => {
+
+})
+
 module.exports = usersRouter
