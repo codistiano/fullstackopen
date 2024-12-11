@@ -141,10 +141,10 @@ const App = () => {
         <h2>Log in to application</h2>
         <form>
           <label>Username:</label>
-          <input value={username} onChange={e => setUsername(e.target.value)} />
+          <input value={username} data-testid='username' onChange={e => setUsername(e.target.value)} />
           <br />
           <label>Password:</label>
-          <input value={password} onChange={e => setPassword(e.target.value)} />
+          <input value={password} data-testid='password' onChange={e => setPassword(e.target.value)} />
           <br />
           <button onClick={handleLogin}>Login</button>
         </form>
