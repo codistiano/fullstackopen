@@ -1,29 +1,45 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 
-import { getAnecdotes } from './requests'
+import { getAnecdotes, voteAnecdote } from './requests'
 
 const App = () => {
+  const queryClient = useQueryClient()
+
+  const voteAnecdoteMutation = useMutation({
+    mutationFn: voteAnecdote,
+    onSuccess: (updatedAnecdote) => {
+      const anecdotes = queryClient.getQueryData(['anecdotes'])
+      queryClient.setQueryData(
+        ['anecdotes'],
+        anecdotes.map((anecdote) =>
+          anecdote.id !== updatedAnecdote.id ? anecdote : updatedAnecdote,
+        ),
+      )
+    },
+  })
+
   const handleVote = (anecdote) => {
-    console.log('vote')
+    console.log({ ...anecdote, votes: anecdote.votes + 1 })
+    voteAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
   }
 
   const result = useQuery({
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes,
     refetchOnWindowFocus: false,
-    retry: 1
+    retry: 1,
   })
-  
+
   console.log(JSON.parse(JSON.stringify(result)))
 
-  if (result.status === "pending") {
+  if (result.status === 'pending') {
     return <div>Loading ...</div>
   }
 
-  if (result.status === "error") {
+  if (result.status === 'error') {
     return <div>Anecdote service not available due to problems in server</div>
   }
 
