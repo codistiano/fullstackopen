@@ -8,6 +8,10 @@ const CreateNew = (props) => {
   const author = useField("text")
   const info = useField("text")
 
+  const { reset: resetContent, ...contentInput } = content;
+  const { reset: resetAuthor, ...authorInput } = author;
+  const { reset: resetInfo, ...infoInput } = info;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
@@ -19,6 +23,13 @@ const CreateNew = (props) => {
     props.setNotification(`a new anecdote ${content.value} created`);
     navigate("/");
   };
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetContent();
+    resetAuthor();
+    resetInfo();
+  }
 
   return (
     <div>
@@ -43,6 +54,7 @@ const CreateNew = (props) => {
           />
         </div>
         <button>create</button>
+        <button type="button" onClick={handleReset}>reset</button>
       </form>
     </div>
   );
