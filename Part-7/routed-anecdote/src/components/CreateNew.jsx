@@ -38,19 +38,19 @@ const CreateNew = (props) => {
         <div>
           content
           <input
-            {...content}
+            {...contentInput}
           />
         </div>
         <div>
           author
           <input
-            {...author}
+            {...authorInput}
           />
         </div>
         <div>
           url for more info
           <input
-            {...info}
+            {...infoInput}
           />
         </div>
         <button>create</button>
