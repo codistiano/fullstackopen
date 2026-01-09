@@ -1,0 +1,63 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": "2",
+      "content": "best feature ever <3"
+    },
+    {
+      "id": "a6ea",
+      "content": "check"
+    },
+    {
+      "id": "46f3",
+      "content": "work"
+    },
+    {
+      "id": "cd3a",
+      "content": "asdfed"
+    },
+    {
+      "id": "ed7f",
+      "content": "last time"
+    },
+    {
+      "id": "4b99",
+      "content": "last check"
+    },
+    {
+      "id": "586b",
+      "content": "working"
+    }
+  ],
+  "persons": [
+    {
+      "id": "1",
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": "2",
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "id": "4e68",
+      "name": "asd",
+      "number": "4234234234"
+    },
+    {
+      "id": "2d54",
+      "name": "asdfasdf",
+      "number": "31243214322354325"
+    },
+    {
+      "id": "b99f",
+      "name": "perfect",
+      "number": "9387739287423"
+    }
+  ]
+}
