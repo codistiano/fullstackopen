@@ -8,6 +8,29 @@ interface Result {
   average: number;
 }
 
+interface argsTypes {
+  targetInput: number;
+  hoursList: number[];
+}
+
+const parseArguments = (args: string[]): argsTypes => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  for (let i = 2; i < args.length; i++ ) {
+    if (isNaN(Number(args[i]))) {
+      throw new Error('A provided value is not a number')
+    }
+  }
+  
+  const target = Number(args[2])
+  const hoursList = args.slice(3).map(Number);
+
+  return {
+    targetInput: target,
+    hoursList,
+  }
+}
+
 function calculateExercise(exerciseHours: number[], target: number): Result {
   let daysTrained: number = 0;
   let hoursTrainded: number = 0;
@@ -60,4 +83,6 @@ function calculateExercise(exerciseHours: number[], target: number): Result {
   };
 }
 
-console.log(calculateExercise([3, 0, 2, 4.5, 0, 3, 1], 2))
+const { targetInput, hoursList } = parseArguments(process.argv)
+
+console.log(calculateExercise(hoursList, targetInput))
