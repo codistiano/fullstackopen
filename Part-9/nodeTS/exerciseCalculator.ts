@@ -8,9 +8,9 @@ interface Result {
   average: number;
 }
 
-interface argsTypes {
-  targetInput: number;
-  hoursList: number[];
+export interface argsTypes {
+  target: number;
+  daily_exercises: number[];
 }
 
 const parseArguments = (args: string[]): argsTypes => {
@@ -22,16 +22,16 @@ const parseArguments = (args: string[]): argsTypes => {
     }
   }
   
-  const target = Number(args[2])
+  const targetInput = Number(args[2])
   const hoursList = args.slice(3).map(Number);
 
   return {
-    targetInput: target,
-    hoursList,
+    target: targetInput,
+    daily_exercises: hoursList,
   }
 }
 
-function calculateExercise(exerciseHours: number[], target: number): Result {
+export function calculateExercise(exerciseHours: number[], target: number): Result {
   let daysTrained: number = 0;
   let hoursTrainded: number = 0;
   exerciseHours.forEach((day) => {
@@ -69,6 +69,8 @@ function calculateExercise(exerciseHours: number[], target: number): Result {
         return "Not too bad but could be better";
       case 3:
         return "Great job!";
+      default:
+        return "Unknown Rating"
     }
   };
 
@@ -83,6 +85,7 @@ function calculateExercise(exerciseHours: number[], target: number): Result {
   };
 }
 
-const { targetInput, hoursList } = parseArguments(process.argv)
-
-console.log(calculateExercise(hoursList, targetInput))
+if (require.main === module) {
+  const { target, daily_exercises } = parseArguments(process.argv)
+  console.log(calculateExercise(daily_exercises, target))
+}
