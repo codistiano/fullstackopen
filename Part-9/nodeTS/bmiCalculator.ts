@@ -28,7 +28,10 @@ function calculateBmi(height: number, weight: number): string {
     }
 }
 
-let { weight, height } = parseArguments(process.argv)
+if (require.main === module) {
+    let { weight, height } = parseArguments(process.argv)
+    console.log(calculateBmi(height, weight))
+}
 
-console.log(calculateBmi(weight, height))
+export default calculateBmi;
 
