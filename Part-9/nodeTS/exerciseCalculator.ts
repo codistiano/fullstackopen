@@ -41,7 +41,7 @@ function calculateExercise(exerciseHours: number[], target: number): Result {
     }
   });
 
-  let avgTrainingHours = hoursTrainded / exerciseHours.length;
+  const avgTrainingHours = hoursTrainded / exerciseHours.length;
 
   let success = false;
   if (avgTrainingHours === target) {

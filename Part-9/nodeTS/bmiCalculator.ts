@@ -18,7 +18,7 @@ const parseArguments = (args: string[]): BmiValues => {
 };
 
 function calculateBmi(height: number, weight: number): string {
-    let bmi = weight / ((height / 100) ** 2)
+    const bmi = weight / ((height / 100) ** 2)
     if (bmi < 18.5) {
         return 'Underweight'
     } else if (bmi > 24.5) {
@@ -29,7 +29,7 @@ function calculateBmi(height: number, weight: number): string {
 }
 
 if (require.main === module) {
-    let { weight, height } = parseArguments(process.argv)
+    const { weight, height } = parseArguments(process.argv)
     console.log(calculateBmi(height, weight))
 }
 

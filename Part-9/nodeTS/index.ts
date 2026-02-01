@@ -7,18 +7,17 @@ app.get("/hello", (_req, res) => {
 });
 
 app.get("/bmi", (req, res) => {
-    let { height, weight } = req.query
+    const { height, weight } = req.query
 
     if (height === undefined || weight === undefined) {
-      res.json({
+      return res.json({
         error: "malformatted parameters"
       })
-      return
     }
 
-    let bmi = calculateBmi(Number(height), Number(weight))
+    const bmi = calculateBmi(Number(height), Number(weight))
 
-    res.json({
+    return res.json({
       weight,
       height,
       bmi
