@@ -1,12 +1,60 @@
+import Part from "./Part";
+import type { CoursePart } from "../App";
+
 type Props = {
-    name: string;
-    exerciseCount: number;
-}
+  courseParts: CoursePart[];
+};
 
-const Content = (props: Props) => {
+const Content = ({ courseParts }: Props) => {
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`,
+    );
+  };
+
   return (
-    <p>{props.name} {props.exerciseCount}</p>
-  )
-}
+    <>
+      {courseParts.map((element) => {
+        switch (element.kind) {
+          case "basic":
+            return (
+              <Part
+                name={element.name}
+                exerciseCount={element.exerciseCount}
+                description={element.description}
+              />
+            );
+          case "group":
+            return (
+              <Part
+                name={element.name}
+                exerciseCount={element.exerciseCount}
+                groupProjectCount={element.groupProjectCount}
+              />
+            );
+          case "background":
+            return (
+              <Part
+                name={element.name}
+                exerciseCount={element.exerciseCount}
+                backgroundMaterial={element.backgroundMaterial}
+              />
+            );
+          case "special":
+            return (
+              <Part
+                name={element.name}
+                exerciseCount={element.exerciseCount}
+                description={element.description}
+                requirements={element.requirements}
+              />
+            );
+          default:
+            return assertNever(element);
+        }
+      })}
+    </>
+  );
+};
 
-export default Content
+export default Content;
