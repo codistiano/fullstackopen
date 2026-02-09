@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import type { diary } from "./types";
+import type { diary, NewDiaryEntry } from "./types";
 import Entry from "./components/entry";
 import NewEntry from "./components/NewEntry";
 
@@ -18,12 +18,7 @@ const App = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const addEntry = (entry: {
-    date: string;
-    visibility: string;
-    weather: string;
-    comment: string;
-  }) => {
+  const addEntry = (entry: NewDiaryEntry) => {
     setError(null);
     axios
       .post("http://localhost:3000/api/diaries", entry)
