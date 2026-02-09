@@ -6,6 +6,7 @@ import NewEntry from "./components/NewEntry";
 
 const App = () => {
   const [data, setData] = useState<diary[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -17,17 +18,29 @@ const App = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const addEntry = (entry: { date: string; visibility: string; weather: string; comment: string }) => {
+  const addEntry = (entry: {
+    date: string;
+    visibility: string;
+    weather: string;
+    comment: string;
+  }) => {
+    setError(null);
     axios
       .post("http://localhost:3000/api/diaries", entry)
       .then((res) => res.data)
       .then((created) => setData((prev) => prev.concat(created)))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        const msg = err?.response?.data || err.message || "Unknown error";
+        setError(String(msg));
+      });
   };
 
   return (
     <>
       <div>
+        {error && (
+          <div style={{ color: "red", whiteSpace: "pre-wrap" }}>{error}</div>
+        )}
         <NewEntry onSubmit={addEntry} />
       </div>
       <div>
